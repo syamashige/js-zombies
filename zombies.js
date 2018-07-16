@@ -207,6 +207,16 @@ Player.prototype.checkPack = function() {
 //     }
 //  }
 
+Player.prototype.takeItem = function(Item) {
+  if (this._pack.length < 3) {
+    return this._pack.push(Item);
+  } else {
+    console.log("The pack is full, so the item could not be stored");
+    return false;
+  }
+
+}
+
 
 
 /**
@@ -247,6 +257,18 @@ Player.prototype.checkPack = function() {
 //   }
 // }
 
+Player.prototype.discardItem = function(item) {
+  if (this._pack.includes(item)) {
+    this._pack.splice((this._pack.indexOf(item)), 1);
+    console.log(this._pack.indexOf(item));
+    return true;
+  } else {
+    console.log("Nothing could be discarded since the item coudn ot be found.");
+    return false;
+  }
+
+}
+
 /**
  * Player Class Method => equip(itemToEquip)
  * -----------------------------
@@ -284,6 +306,23 @@ Player.prototype.checkPack = function() {
 //     console.log("something else");
 //   }
 // }
+
+Player.prototype.equip = function(itemToEquip) {
+  if(itemToEquip instanceof (Weapon) === true) {
+    if (this.equipped === false && this._pack.includes(itemToEquip)) {
+      this._pack.splice(this._pack.indexOf(itemToEquip), 1)
+      this.equipped = itemToEquip;
+    } else {
+      this._pack.push(this.equipped)
+      if (this._pack.includes(itemToEquip)) {
+        this._pack.splice(this._pack.indexOf(itemToEquip), 1)
+        this.equipped = itemToEquip;
+      }
+    }
+  } else {
+    console.log("oops");
+  }
+}
 /**
  * Player Class Method => eat(itemToEat)
  * -----------------------------
@@ -317,6 +356,18 @@ Player.prototype.checkPack = function() {
 //   }
 //  }
 
+Player.prototype.eat = function (itemToEat) {
+  if (itemToEat instanceof (Food) === true) {
+    if (this._pack.includes(itemToEat)) {
+      this.health += itemToEat.energy
+      if (this.health > this.getMaxHealth()) {
+        this.health = this.getMaxHealth()
+      }
+      this._pack.splice(this._pack.indexOf(itemToEat),1)
+    }
+  }
+}
+
 
 /**
  * Player Class Method => useItem(item)
@@ -339,6 +390,14 @@ Player.prototype.checkPack = function() {
 //     this.eat(item);
 //   }
 // }
+
+Player.prototype.useItem = function(item) {
+  if (item instanceof (Weapon) === true) {
+    this.equip(item);
+  } else if (item instanceof (Food) === true) {
+    this.eat(item)
+  }
+}
 
 /**
  * Player Class Method => equippedWith()
@@ -363,6 +422,14 @@ Player.prototype.checkPack = function() {
 //    }
 //  }
 //  };
+
+Player.prototype.equippedWith = function() {
+  if (this.equipped instanceof (Weapon) === true) {
+    return this.equipped.name;
+  } else {
+    return false;
+  }
+}
 
 
 /**
@@ -392,6 +459,13 @@ Player.prototype.checkPack = function() {
  
 //  }
 
+function Zombie (health, strength, speed) {
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+}
+
 /**
  * Class => FastZombie(health, strength, speed)
  * -----------------------------
@@ -413,11 +487,20 @@ Player.prototype.checkPack = function() {
 //    }
 //  }
 
+  function FastZombie (health, strength, speed) {
+    this.health = health;
+    this.strength = strength; 
+    this.speed = speed;
+    this.isAlive = true;
+  }
+
+
 /**
  * FastZombie Extends Zombie Class
  * -----------------------------
  */
 
+ FastZombie.prototype = Object.create(Zombie.prototype);
 
 
 /**
@@ -441,12 +524,19 @@ Player.prototype.checkPack = function() {
 //    }
 //  }
 
+function StrongZombie (health, strength, speed) {
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+} 
+
 /**
  * StrongZombie Extends Zombie Class
  * -----------------------------
  */
 
-
+StrongZombie.prototype = Object.create(Zombie.prototype)
 
 /**
  * Class => RangedZombie(health, strength, speed)
@@ -469,12 +559,19 @@ Player.prototype.checkPack = function() {
 //    }
 //  }
 
+function RangedZombie (health, strength, speed) {
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+}
+
 /**
  * RangedZombie Extends Zombie Class
  * -----------------------------
  */
 
-
+RangedZombie.prototype = Object.create(Zombie.prototype);
 
 /**
  * Class => ExplodingZombie(health, strength, speed)
@@ -497,12 +594,19 @@ Player.prototype.checkPack = function() {
 //    }
 //  }
 
+function ExplodingZombie (health, strength, speed) {
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+}
+
 /**
  * ExplodingZombie Extends Zombie Class
  * -----------------------------
  */
 
-
+ExplodingZombie.prototype = Object.create(Zombie.prototype);
 
 
 /**
